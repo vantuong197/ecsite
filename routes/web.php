@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,7 +21,13 @@ Route::get('/', function () {
 
 
 
-Route::get('admin', [AuthController::class, 'index'])->name('auth.admin')->middleware('LoginMiddleware');
+// Dashboard
 Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index')->middleware('AuthMiddleware');
+
+Route::get('user/index', [UserController::class, 'index'])->name('user.index')->middleware('AuthMiddleware');
+
+
+
+Route::get('admin', [AuthController::class, 'index'])->name('auth.admin')->middleware('LoginMiddleware');
 Route::post('login', [AuthController::class, 'login'])->name('auth.login');
 Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');

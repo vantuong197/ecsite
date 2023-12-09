@@ -21,10 +21,10 @@
                 </div>
             </li>
             <li class="active">
-                <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">User Manager</span> <span class="fa arrow"></span></a>
+                <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">User Manager</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li><a href="index.html">Group User</a></li>
-                    <li><a href="dashboard_2.html">User</a></li>   
+                    <li><a href="">Group User Manager</a></li>
+                    <li><a href="{{route('user.index')}}">User Manager</a></li>   
                 </ul>
             </li>
         
