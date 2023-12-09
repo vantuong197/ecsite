@@ -14,40 +14,37 @@
         </tr>
     </thead>
     <tbody>
-        @for($i = 0; $i < 100; $i++)
-        <tr>
-            <td>
-                <input type="checkbox" value="" class="input-checkbox checkbox-item">
-            </td>
-            <td>
-                <div class="image image-cover"><img src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg" alt=""></div>
-            </td>
-            <td>
-                <div class="user-item name">Join Weak</div>
-            </td>
-            <td>
-                <div class="user-item email">abc@gmail.com</div>
-            </td>
-            <td>
-                <div class="user-item address">Tokyo City</div>
-            </td>
-            <td>
-                <div class="user-item address">0987654321</div>
-            </td>
-            <td class="text-center">
-                <input type="checkbox" class="js-switch"/>
-            </td>
-            <td class="text-center">
-                <a href="" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                <a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a>
-            </td>
-        </tr>
-        @endfor
+        @if(isset($users) && is_object($users))
+            @foreach($users as $user)
+                <tr>
+                    <td>
+                        <input type="checkbox" value="" class="input-checkbox checkbox-item">
+                    </td>
+                    <td>
+                        <div class="image image-cover"><img src="https://haycafe.vn/wp-content/uploads/2021/11/Anh-avatar-dep-chat-lam-hinh-dai-dien.jpg" alt=""></div>
+                    </td>
+                    <td>
+                        <div class="user-item name">{{$user->name}}</div>
+                    </td>
+                    <td>
+                        <div class="user-item email">{{$user->email}}</div>
+                    </td>
+                    <td>
+                        <div class="user-item address">{{$user->address}}</div>
+                    </td>
+                    <td>
+                        <div class="user-item address">{{$user->phone}}</div>
+                    </td>
+                    <td class="text-center">
+                        <input type="checkbox" class="js-switch"/>
+                    </td>
+                    <td class="text-center">
+                        <a href="" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                        <a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>   
+            @endforeach
+        @endif
     </tbody>
 </table>
-{{-- <script>
-    $(document).ready(function(){   
-        var elem = document.querySelector('.js-switch');
-        var switchery = new Switchery(elem, { color: '#1AB394' });
-    });
-</script> --}}
+{{ $users->links('pagination::bootstrap-4') }}
