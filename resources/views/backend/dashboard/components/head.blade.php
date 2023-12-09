@@ -9,7 +9,7 @@
 <link href="backend/css/animate.css" rel="stylesheet">
 @if (isset($config['css']) && is_array($config['css']))
     @foreach ($config['css'] as $key => $value)
-        {!! '<link src="'.$value.'" rel="stylesheet">' !!}
+        {!! '<link href="'.$value.'" rel="stylesheet">' !!}
     @endforeach 
 @endif
 <link href="backend/css/style.css" rel="stylesheet">
