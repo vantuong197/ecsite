@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Ajax\LocationController;
 use App\Http\Controllers\Backend\UserController;
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +25,14 @@ Route::get('/', function () {
 // Dashboard
 Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index')->middleware('AuthMiddleware');
 
-Route::get('user/index', [UserController::class, 'index'])->name('user.index')->middleware('AuthMiddleware');
+Route::prefix('user')->group(function () {
+    Route::get('/index', [UserController::class, 'index'])->name('user.index')->middleware('AuthMiddleware');
+    Route::get('/create', [UserController::class, 'create'])->name('user.create')->middleware('AuthMiddleware');
+});
 
+// Ajax
+
+Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation')->middleware('AuthMiddleware');
 
 
 Route::get('admin', [AuthController::class, 'index'])->name('auth.admin')->middleware('LoginMiddleware');

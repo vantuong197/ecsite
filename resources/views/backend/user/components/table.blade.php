@@ -1,3 +1,4 @@
+<h5>{{$heading}}</h5>
 <table class="table table-striped table-bordered">
     <thead>
         <tr>

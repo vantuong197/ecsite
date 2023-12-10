@@ -1,6 +1,11 @@
 <?php
 
 return [
-    'title' => 'Quản lý thành viên',
-    'tableHeading' => 'User list'
+    'index' => [
+        'title' => 'User manager',
+        'tableHeading' => 'User list'
+    ],
+    'create' => [
+        'title' => 'Add new user',
+    ]
 ];
