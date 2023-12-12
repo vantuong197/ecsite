@@ -128,7 +128,7 @@
                             <div class="col-lg-6">
                                 <div class="form-row">
                                     <label for="" class="control-label text-left">Province</label>
-                                    <select name="province_id" id="" class="form-control selected2 province">
+                                    <select name="province_id" id="" class="form-control selected2 location" data-target="district">
                                         <option value="0">[Select Province]</option>
                                         @if(isset($provinces) && is_object($provinces)) 
                                             @foreach ($provinces as $province)
@@ -141,7 +141,7 @@
                             <div class="col-lg-6">
                                 <div class="form-row">
                                     <label for="" class="control-label text-left">District</label>
-                                    <select name="district_id" id="" class="form-control district">
+                                    <select name="district_id" id="" class="form-control district selected2 location" data-target="wards">
                                         <option value="0">[Select District]</option>
                                     </select>
                                 </div>
@@ -151,7 +151,7 @@
                             <div class="col-lg-6">
                                 <div class="form-row">
                                     <label for="" class="control-label text-left">Ward</label>
-                                    <select name="ward_id" id="" class="form-control">
+                                    <select name="ward_id" id="" class="form-control wards">
                                         <option value="0">[Select Ward]</option>
                                     </select>
                                 </div>
