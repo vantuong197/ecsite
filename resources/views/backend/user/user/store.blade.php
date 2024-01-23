@@ -1,7 +1,23 @@
-@include('backend.user.components.breadcrumb', ['title' => $config['seo']['title']])
+@include('backend.user.user.components.breadcrumb', ['title' => $config['seo']['title']])
 
 
-<form action="" class="box">
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>
+                    {{$error}}
+                </li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+@php
+    // dd($user);
+    $url = ($config['method'] == 'create') ? route('user.user.store') : route('user.user.update', $user->id);
+@endphp
+<form action="{{$url}}" class="box" method="post">
+    @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-lg-5">
@@ -20,7 +36,7 @@
                                     <input 
                                         type="text"
                                         name="email"
-                                        value=""
+                                        value="{{old('email', ($user->email) ?? '')}}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -33,7 +49,7 @@
                                     <input 
                                         type="text"
                                         name="name"
-                                        value=""
+                                        value="{{old('name', ($user->name) ?? '')}}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -41,14 +57,21 @@
                                 </div>
                             </div>
                         </div>
+                        @php 
+                            $userCatalogue = [
+                                '[Select user catalogue]',
+                                'Admin',
+                                'Collaborators'
+                            ]
+                        @endphp
                         <div class="row mt15">
                             <div class="col-lg-6">
                                 <div class="form-row">
                                     <label for="" class="control-label text-left">User Catalogue <span class="text-danger">(*)</span></label>
                                     <select name="user_catalogue_id" class="form-control">
-                                        <option value="0">[Select user catalogue]</option>
-                                        <option value="1">Admin</option>
-                                        <option value="2">Collaborators</option>
+                                        @foreach($userCatalogue as $key => $item)
+                                        <option {{$key == old('user_catalogue_id', isset($user->user_catalogue_id) ? $user->user_catalogue_id : '') ? 'selected' : ''}} value="{{$key}}">{{$item}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -56,9 +79,9 @@
                                 <div class="form-row">
                                     <label for="" class="control-label text-left">Birthday</span></label>
                                     <input 
-                                        type="text"
+                                        type="date"
                                         name="birthday"
-                                        value=""
+                                        value="{{old('birthday', ($user->birthday) ?? '')}}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -66,42 +89,45 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt15">
-                            <div class="col-lg-6">
-                                <div class="form-row">
-                                    <label for="" class="control-label text-left">Password<span class="text-danger">(*)</span></label>
-                                    <input 
-                                        type="password"
-                                        name="password"
-                                        value=""
-                                        class="form-control"
-                                        placeholder=""
-                                        autocomplete="off"
-                                    >
+                        @if($config['method'] == 'create')
+                        
+                            <div class="row mt15">
+                                <div class="col-lg-6">
+                                    <div class="form-row">
+                                        <label for="" class="control-label text-left">Password<span class="text-danger">(*)</span></label>
+                                        <input 
+                                            type="password"
+                                            name="password"
+                                            value=""
+                                            class="form-control"
+                                            placeholder=""
+                                            autocomplete="off"
+                                        >
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-row">
+                                        <label for="" class="control-label text-left">Confirm Password <span class="text-danger">(*)</span></label>
+                                        <input 
+                                            type="password"
+                                            name="confirm_password"
+                                            value=""
+                                            class="form-control"
+                                            placeholder=""
+                                            autocomplete="off"
+                                        >
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-row">
-                                    <label for="" class="control-label text-left">Confirm Password <span class="text-danger">(*)</span></label>
-                                    <input 
-                                        type="password"
-                                        name="confirm_password"
-                                        value=""
-                                        class="form-control"
-                                        placeholder=""
-                                        autocomplete="off"
-                                    >
-                                </div>
-                            </div>
-                        </div>
+                        @endif
                         <div class="row mt15">
                             <div class="col-lg-12">
                                 <div class="form-row">
                                     <label class="control-label text-left">Avatar</label>
                                     <input 
                                         type="text"
-                                        name="avatar"
-                                        value=""
+                                        name="image"
+                                        value="{{old('image', ($user->image) ?? '' )}}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -128,11 +154,11 @@
                             <div class="col-lg-6">
                                 <div class="form-row">
                                     <label for="" class="control-label text-left">Province</label>
-                                    <select name="province_id" id="" class="form-control selected2 location" data-target="district">
+                                    <select name="province_id" id="" class="form-control selected2 location province" data-target="district">
                                         <option value="0">[Select Province]</option>
                                         @if(isset($provinces) && is_object($provinces)) 
                                             @foreach ($provinces as $province)
-                                                <option value="{{$province->code}}">{{ $province->name_en }}</option>
+                                                <option @if(old('province_id') == $province->code) selected @endif value="{{$province->code}}">{{ $province->name_en }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -151,7 +177,7 @@
                             <div class="col-lg-6">
                                 <div class="form-row">
                                     <label for="" class="control-label text-left">Ward</label>
-                                    <select name="ward_id" id="" class="form-control wards">
+                                    <select name="ward_id" id="" class="form-control wards selected2">
                                         <option value="0">[Select Ward]</option>
                                     </select>
                                 </div>
@@ -162,7 +188,7 @@
                                     <input 
                                         type="text"
                                         name="address"
-                                        value=""
+                                        value="{{old('address', (isset($user->address)) ? $user->address : '')}}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -177,7 +203,7 @@
                                     <input 
                                         type="text"
                                         name="phone"
-                                        value=""
+                                        value="{{old('phone', ($user->phone) ?? '')}}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -190,7 +216,7 @@
                                     <input 
                                         type="text"
                                         name="description"
-                                        value=""
+                                        value="{{old('description',($user->description) ?? '')}}"
                                         class="form-control"
                                         placeholder=""
                                         autocomplete="off"
@@ -208,3 +234,10 @@
     </div>
     
 </form>
+
+
+<script>
+    var province_id = '{{(isset($user->province_id) ? $user->province_id : old('province_id'))}}'
+    var district_id = '{{(isset($user->district_id) ? $user->district_id : old('district_id'))}}'
+    var ward_id = '{{(isset($user->ward_id) ? $user->ward_id : old('ward_id'))}}'
+</script>

@@ -104,3 +104,13 @@ h5{
     width: 100px;
     padding: 10px;
 }
+
+.active-bg{
+    background: #ffc !important;
+}
+
+#checkAll,
+.checkbox-item{
+    width: 15px;
+    height: 15px;
+}

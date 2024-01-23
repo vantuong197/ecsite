@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\UserServiceInterface;
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
+use App\Services\Interfaces\UserCatalogueServiceInterface;
+use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
 
 
 use Illuminate\Http\Request;
@@ -16,11 +16,11 @@ use Illuminate\Support\Carbon;
  * Class UserService
  * @package App\Services
  */
-class UserService implements UserServiceInterface
+class UserCatalogueService implements UserCatalogueServiceInterface
 {
-    private $userRepository;
-    public function __construct(UserRepository $userRepository){
-        $this->userRepository = $userRepository;
+    private $userCatalogueRepository;
+    public function __construct(UserCatalogueRepository $userCatalogueRepository){
+        $this->userCatalogueRepository = $userCatalogueRepository;
     }
     public function paginate($request){
         $requestInput = $request->input();
@@ -31,17 +31,15 @@ class UserService implements UserServiceInterface
         }
         $condition['keyword'] = addslashes($request->input('keyword'));
         $perPage = $request->integer('perpage');
-        $users = $this->userRepository->pagination($this->paginateSelect(), $condition, [], $perPage, ['path' => '/user/user/index']);
+        $users = $this->userCatalogueRepository->pagination($this->paginateSelect(), $condition, [], $perPage, ['path' => '/user/catalogue/index'], ['users']);
         return $users;
     }
 
     public function create(Request $request){
         DB::beginTransaction();
         try{
-
-            $payload = $request->except(['_token', 'confirm_password']);
-            $payload['password'] = Hash::make($payload['password']);
-            $user = $this->userRepository->create($payload);
+            $payload = $request->except(['_token',]);
+            $user = $this->userCatalogueRepository->create($payload);
             DB::commit();
             return true;
         }catch(Exception $error){
@@ -56,7 +54,7 @@ class UserService implements UserServiceInterface
         try{
 
             $payload = $request->except(['_token']);
-            $user = $this->userRepository->update($id, $payload);
+            $user = $this->userCatalogueRepository->update($id, $payload);
             DB::commit();
             return true;
         }catch(Exception $error){
@@ -69,7 +67,7 @@ class UserService implements UserServiceInterface
     public function delete($id){
         DB::beginTransaction();
         try{
-            $user = $this->userRepository->delete($id);
+            $user = $this->userCatalogueRepository->delete($id);
             DB::commit();
             return true;
         }catch(Exception $error){
@@ -81,7 +79,7 @@ class UserService implements UserServiceInterface
     }
 
     private function paginateSelect(){
-        return ['id', 'email', 'phone', 'address', 'name', 'publish'];
+        return ['id','name', 'publish', 'description'];
     }
 
     public function updateStatus($post = []){
@@ -89,7 +87,7 @@ class UserService implements UserServiceInterface
         try{
 
             $payload[$post['field']] = ($post['value'] == 1) ? 0 : 1;
-            $user = $this->userRepository->update($post['modelId'], $payload);
+            $user = $this->userCatalogueRepository->update($post['modelId'], $payload);
             DB::commit();
             return true;
         }catch(Exception $error){
@@ -105,7 +103,7 @@ class UserService implements UserServiceInterface
         try{
 
             $payload[$post['field']] = $post['value'];
-            $user = $this->userRepository->updateByWhereIn('id',$post['id'], $payload);
+            $user = $this->userCatalogueRepository->updateByWhereIn('id',$post['id'], $payload);
             DB::commit();
             return true;
         }catch(Exception $error){
@@ -114,5 +112,8 @@ class UserService implements UserServiceInterface
             echo $error->getMessage(); die();
             return false;
         } 
+    }
+    private function updateUser(){
+        
     }
 }

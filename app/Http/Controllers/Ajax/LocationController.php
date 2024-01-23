@@ -27,7 +27,7 @@ class LocationController extends Controller
             
         }else if($get['target'] == 'wards'){
             $districts = $this->districtRepository->findById($get['data']['location_id'], ['code', 'name_en'], ['wards']);
-            $html = $this->renderHtml($districts->wards);
+            $html = $this->renderHtml($districts->wards, '[Select Ward]');
         }
         $response = [
             'html' => $html
